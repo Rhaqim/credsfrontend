@@ -1,11 +1,7 @@
 import { BASEURL } from "@/config";
 
 export const AuthRoutes = {
-	login: "/auth/login",
-	register: "/auth/register",
-
-	googleLogin: "/auth/google/login",
-	googleCallback: "/auth/google/callback",
+	login: (provider: "google" | "github") => `/auth/${provider}/login`,
 
 	logout: "/auth/logout",
 

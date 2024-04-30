@@ -62,14 +62,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 	}, []);
 
 	const login = (provider: "google" | "github") => {
-		let url = AuthRoutes.googleLogin;
-
-		switch (provider) {
-			case "google":
-				url = AuthRoutes.googleLogin;
-			default:
-				url = AuthRoutes.googleLogin;
-		}
+		let url = AuthRoutes.login(provider);
 
 		const authURL = `${BASEURL}/${url}`;
 
