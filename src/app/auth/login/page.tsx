@@ -1,16 +1,14 @@
 "use client";
 
 import React from "react";
-import { AuthRoutes } from "@/services/api";
+import { useAuth } from "@/context/auth.context";
 
 const Login = () => {
-	const LoginWithGoogle = async () => {
-		window.location.href = AuthRoutes.googleLogin;
-	};
+	const { login } = useAuth();
 
 	return (
 		<div>
-			<button onClick={LoginWithGoogle}>Login with Google</button>
+			<button onClick={() => login("google")}>Login with Google</button>
 		</div>
 	);
 };

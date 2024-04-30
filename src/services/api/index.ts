@@ -1,13 +1,9 @@
-import { BASEURL } from "@/config";
+import { apiFunctions } from "./providers";
+import { AuthRoutes } from "./routes";
 
-export const AuthRoutes = {
-	login: `${BASEURL}/auth/login`,
-	register: `${BASEURL}/auth/register`,
-    
-    googleLogin: `${BASEURL}/auth/google/login`,
-	googleCallback: `${BASEURL}/auth/google/callback`,
-    
-	logout: `${BASEURL}/auth/logout`,
+const { get, post } = apiFunctions;
 
-	me: `${BASEURL}/auth/me`,
+export const AuthEndPoints = {
+	me: () => get(AuthRoutes.me),
+	logout: () => get(AuthRoutes.logout),
 };
