@@ -41,11 +41,13 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [loading, setLoading] = useState(false);
 
+	console.log("user", user);
+
 	useEffect(() => {
 		const fetchUser = async () => {
 			setLoading(true);
 			try {
-				const data = await AuthEndPoints.me();
+				const { data } = await AuthEndPoints.me();
 				const authenticatedUser = data as unknown as User;
 
 				if (authenticatedUser) {

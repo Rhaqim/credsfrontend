@@ -1,9 +1,9 @@
 declare interface User {
 	ID?: string;
-	Displayname: string;
-	Email: string;
-	OAuthID: string;
-	RefreshToken?: string;
+	display_name: string;
+	email: string;
+	oauth_id: string;
+	refresh_token?: string;
 	CreatedAt?: Date;
 	UpdatedAt?: Date;
 }
