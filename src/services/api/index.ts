@@ -5,6 +5,7 @@ export const AuthRoutes = {
 	register: `${BASEURL}/auth/register`,
     
     googleLogin: `${BASEURL}/auth/google/login`,
+	googleCallback: `${BASEURL}/auth/google/callback`,
     
 	logout: `${BASEURL}/auth/logout`,
 
