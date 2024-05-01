@@ -1,14 +1,7 @@
-"use client";
+import React from "react";
+import { SideNavProps } from "@/types/account/items.type";
 
-import { useState } from "react";
-
-const SideNav = () => {
-	const [isOpen, setIsOpen] = useState(false);
-
-	const toggleSideNav = () => {
-		setIsOpen(!isOpen);
-	};
-
+const SideNav = ({ isOpen, toggleSideNav, items }: SideNavProps) => {
 	return (
 		<div className="min-h-screen flex overflow-hidden bg-gray-100">
 			{/* Side bar */}
@@ -22,14 +15,17 @@ const SideNav = () => {
 					<div className="bg-white border-r border-gray-200 flex flex-col flex-grow pt-5 pb-4">
 						{/* Your side navigation items */}
 						<div className="px-4 space-y-1">
-							<a
-								href="#"
-								className="bg-gray-200 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-							>
-								{/* Your navigation item content */}
-								Item 1
-							</a>
-							{/* Add more navigation items as needed */}
+							{items.map((item, index) => (
+								<a
+									key={index}
+									onClick={item.onClick}
+									href="#"
+									className="bg-gray-200 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+								>
+									{/* Your navigation item content */}
+									{item.label}
+								</a>
+							))}
 						</div>
 					</div>
 				</div>
@@ -54,14 +50,17 @@ const SideNav = () => {
 						<div className="h-full flex flex-col py-6 bg-white shadow-xl overflow-y-scroll">
 							<div className="px-4 space-y-1">
 								{/* Your mobile side navigation items */}
-								<a
-									href="#"
-									className="bg-gray-200 text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
-								>
-									{/* Your navigation item content */}
-									Item 1
-								</a>
-								{/* Add more navigation items as needed */}
+								{items.map((item, index) => (
+									<a
+										key={index}
+										onClick={item.onClick}
+										href="#"
+										className="bg-gray-200 text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
+									>
+										{/* Your navigation item content */}
+										{item.label}
+									</a>
+								))}
 							</div>
 						</div>
 					</div>
