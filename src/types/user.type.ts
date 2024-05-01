@@ -1,11 +1,10 @@
-declare interface User {
-	ID?: string;
+import { BaseID } from ".";
+
+declare interface User extends BaseID {
 	display_name: string;
 	email: string;
 	oauth_id: string;
 	refresh_token?: string;
-	CreatedAt?: Date;
-	UpdatedAt?: Date;
 }
 
 export default User;

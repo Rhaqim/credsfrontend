@@ -1,10 +1,11 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 
 import SideNav from "@/components/Account/SideNav";
-import { SideNavItem } from "@/types/account/items.type";
-import Link from "next/link";
+
+import { items } from "./utils";
 
 const Account = () => {
 	const [isOpen, setIsOpen] = useState(false);
@@ -14,33 +15,22 @@ const Account = () => {
 		setIsOpen(!isOpen);
 	};
 
-	const items: SideNavItem[] = [
+	const IntroCards = [
 		{
-			label: "Dashboard",
-			onClick: () => setActiveSection("Dashboard"),
+			title: "Organizations",
+			description: "Manage your organizations",
+			link: "/organization",
 		},
 		{
-			label: "Organizations",
-			onClick: () => setActiveSection("Organizations"),
+			title: "Billing",
+			description: "Manage your billing settings",
+			link: "/account/billing",
 		},
 		{
-			label: "Settings",
-			onClick: () => setActiveSection("Settings"),
+			title: "Analytics",
+			description: "View your analytics",
+			link: "/account/analytics",
 		},
-		{
-			label: "Billing",
-			onClick: () => setActiveSection("Billing"),
-		},
-	];
-
-	// Sample data for organizations
-	const organizations = [
-		{ name: "Organization 1", credentials: 10 },
-		{ name: "Organization 2", credentials: 5 },
-		{ name: "Organization 3", credentials: 8 },
-		{ name: "Organization 4", credentials: 12 },
-		{ name: "Organization 5", credentials: 7 },
-		// Add more organizations as needed
 	];
 
 	return (
@@ -48,7 +38,7 @@ const Account = () => {
 			<SideNav
 				isOpen={isOpen}
 				toggleSideNav={toggleSideNav}
-				items={items}
+				items={items(setActiveSection)}
 				activeSection={activeSection}
 			/>
 			<div className="flex flex-col w-full p-4 min-h-screen overflow-y-auto">
@@ -57,20 +47,18 @@ const Account = () => {
 						<>
 							<h1 className="text-2xl font-bold">Account</h1>
 							<p className="text-sm text-gray-500">Welcome to your account</p>
-							{/* Grid of organizations */}
-							<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-								{organizations.map((org, index) => (
+							{/* Grid of Sections */}
+							<div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+								{IntroCards.map((card, index) => (
 									<Link
-										href={`/organization/${index}`}
+										href={card.link}
 										key={index}
 										className="bg-white p-4 rounded-lg shadow-md"
 									>
 										<h2 className="text-lg font-semibold mb-2 text-black">
-											{org.name}
+											{card.title}
 										</h2>
-										<p className="text-sm text-gray-500">
-											Credentials: {org.credentials}
-										</p>
+										<p className="text-sm text-gray-500">{card.description}</p>
 									</Link>
 								))}
 							</div>
