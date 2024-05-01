@@ -8,9 +8,9 @@ declare interface Organization extends BaseID {
 	description: string;
 	organization_type: OrganizationType;
 	credentials?: Credential[];
-	credentialsCount?: number;
+	credentials_count?: number;
 	members?: OrganizationMember[];
-	membersCount?: number;
+	members_count?: number;
 }
 
 export enum OrganizationType {

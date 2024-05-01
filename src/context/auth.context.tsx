@@ -42,8 +42,6 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [loading, setLoading] = useState(false);
 
-	console.log("user", user);
-
 	useEffect(() => {
 		const fetchUser = async () => {
 			setLoading(true);

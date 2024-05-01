@@ -1,16 +1,12 @@
 "use client";
 
-import React, { useEffect } from "react";
+import React from "react";
 import Link from "next/link";
 
 import { useOrg } from "@/context/org.context";
 
 const Organizations = () => {
-	const { organizations, getOrganizations } = useOrg();
-
-	useEffect(() => {
-		getOrganizations();
-	}, [getOrganizations]);
+	const { organizations } = useOrg();
 
 	return (
 		<div className="flex flex-col w-full p-4 min-h-screen overflow-y-auto">
@@ -26,20 +22,32 @@ const Organizations = () => {
 				</Link>
 			</div>
 			<div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-4">
-				{organizations.map((org, index) => (
-					<Link
-						href={`/organization/${index}`}
-						key={index}
-						className="bg-white p-4 rounded-lg shadow-md"
-					>
-						<h2 className="text-lg font-semibold mb-2 text-black">
-							{org.organization_name}
-						</h2>
-						<p className="text-sm text-gray-500">
-							Credentials: {org.credentialsCount}
-						</p>
-					</Link>
-				))}
+				{organizations.length > 0 &&
+					organizations.map((org, index) => (
+						<Link
+							href={`/organization/${index}`}
+							key={index}
+							className="bg-white p-4 rounded-lg hover:scale-105 hover:shadow-md shadow-indigo-500 transition-all duration-150 ease-linear"
+						>
+							{" "}
+							<div className="mb-2">
+								<h2 className="text-lg font-semibold mb-2 text-black">
+									{org.organization_name}
+								</h2>
+								<p className="text-sm text-gray-500">
+									{org.description || "..."}
+								</p>
+							</div>
+							<div className="flex justify-between">
+								<p className="text-sm text-gray-500">
+									Credentials: {org.credentials_count || 0}
+								</p>
+								<p className="text-sm text-gray-500">
+									Members: {org.members_count || 0}
+								</p>
+							</div>
+						</Link>
+					))}
 			</div>
 		</div>
 	);

@@ -36,11 +36,6 @@ refreshapi.interceptors.request.use(config => {
 
 refreshapi.interceptors.response.use(
 	response => {
-		console.log("The response: ", response);
-		if (response.status === 307) {
-			window.location.href = response.headers.location;
-		}
-
 		const { data, error, type } = response.data;
 		if (type === "error") {
 			throw ErrorHandler(error, ErrorDesignation.USER);
