@@ -8,7 +8,7 @@ export type Action =
 export const initialState: Organization = {
 	organization_name: "",
 	description: "",
-	organization_type: OrganizationType.PERSONAL,
+	organization_type: OrganizationType.COMPANY,
 };
 
 export const reducer = (state: Organization, action: Action) => {

@@ -12,8 +12,8 @@ declare interface Organization extends BaseID {
 }
 
 export enum OrganizationType {
-	PERSONAL = "personal",
 	COMPANY = "company",
+	PERSONAL = "personal",
 	COMMERCIAL = "commercial",
 	EDUCATIONAL = "educational",
 }
