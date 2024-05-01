@@ -1,17 +1,17 @@
 "use client";
 
-import React, { useState } from "react";
-
+import React, { useEffect } from "react";
 import Link from "next/link";
 
+import { useOrg } from "@/context/org.context";
+
 const Organizations = () => {
-	const [organizations, setOrganizations] = useState([
-		{ name: "Organization 1", credentials: 10 },
-		{ name: "Organization 2", credentials: 5 },
-		{ name: "Organization 3", credentials: 8 },
-		{ name: "Organization 4", credentials: 12 },
-		{ name: "Organization 5", credentials: 7 },
-	]);
+	const { organizations, getOrganizations } = useOrg();
+
+	useEffect(() => {
+		getOrganizations();
+	}, [getOrganizations]);
+
 	return (
 		<div className="flex flex-col w-full p-4 min-h-screen overflow-y-auto">
 			<div className="py-4 flex justify-between">
@@ -33,10 +33,10 @@ const Organizations = () => {
 						className="bg-white p-4 rounded-lg shadow-md"
 					>
 						<h2 className="text-lg font-semibold mb-2 text-black">
-							{org.name}
+							{org.organization_name}
 						</h2>
 						<p className="text-sm text-gray-500">
-							Credentials: {org.credentials}
+							Credentials: {org.credentialsCount}
 						</p>
 					</Link>
 				))}

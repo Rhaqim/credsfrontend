@@ -1,20 +1,19 @@
 "use client";
 
 import React, { useReducer } from "react";
+
 import { initialState, reducer } from "./reducer";
+
+import { useOrg } from "@/context/org.context";
 import { OrganizationType } from "@/types/organization.type";
-import { OrgEndPoints } from "@/services/api";
 
 const CreateOrganization = () => {
 	const [state, dispatch] = useReducer(reducer, initialState);
 
-	const handleSubmit = async () => {
-		try {
-			await OrgEndPoints.create(state);
-			alert("Organization created successfully");
-		} catch (error) {
-			alert("Error creating organization");
-		}
+	const { createOrganization } = useOrg();
+
+	const handleSubmit = () => {
+		createOrganization(state);
 	};
 
 	return (

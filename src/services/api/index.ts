@@ -12,4 +12,6 @@ export const AuthEndPoints = {
 
 export const OrgEndPoints = {
 	create: (data: Organization) => post(OrgRoutes.create, data),
+	all: () => get(OrgRoutes.all),
+	find: (id: number) => get(OrgRoutes.one(id)),
 };
