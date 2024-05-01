@@ -6,18 +6,19 @@ import { OrgEndPoints } from "@/services/api";
 import Organization from "@/types/organization.type";
 import Credential from "@/types/credential.type";
 import Member from "@/types/team.type";
+import User from "@/types/user.type";
 
 type OrgContextType = {
 	organizations: Organization[];
 	organization: Organization | null;
 	credentials: Credential[];
-	members: Member[];
+	members: User[];
 	loading: boolean;
 	createOrganization: (data: Organization) => void;
 	getOrganizations: () => void;
 	getOrganization: (id: number) => void;
 	setCredentials: (data: Credential[]) => void;
-	setMembers: (data: Member[]) => void;
+	setMembers: (data: User[]) => void;
 };
 
 export const OrgContext = createContext<OrgContextType>({
@@ -30,7 +31,7 @@ export const OrgContext = createContext<OrgContextType>({
 	getOrganizations: () => {},
 	getOrganization: (id: number) => {},
 	setCredentials: (data: Credential[]) => {},
-	setMembers: (data: Member[]) => {},
+	setMembers: (data: User[]) => {},
 });
 
 export const useOrg = () => {
@@ -50,7 +51,7 @@ export const OrgProvider = ({ children }: OrgProviderType) => {
 	const [organizations, setOrganizations] = useState<Organization[]>([]);
 	const [organization, setOrganization] = useState<Organization | null>(null);
 	const [credentials, setCredentials] = useState<Credential[]>([]);
-	const [members, setMembers] = useState<Member[]>([]);
+	const [members, setMembers] = useState<User[]>([]);
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
@@ -86,7 +87,7 @@ export const OrgProvider = ({ children }: OrgProviderType) => {
 			const { org } = data;
 			setOrganization(org as unknown as Organization);
 			setCredentials(org.credentials as unknown as Credential[]);
-			setMembers(org.members as unknown as Member[]);
+			setMembers(org.members_user as unknown as User[]);
 		} catch (error) {
 			console.error(error);
 		} finally {

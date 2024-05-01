@@ -58,9 +58,9 @@ const Organization = ({ params }: { params: { orgId: number } }) => {
 						{members.map((member, index) => (
 							<li key={index} className="text-lg text-gray-700">
 								<Link
-									href={`/organization/${params.orgId}/team/${member.user_id}`}
+									href={`/organization/${params.orgId}/team/${member.ID}`}
 								>
-									<p>{member.user_id}</p>
+									<p>{member.display_name}</p>
 								</Link>
 							</li>
 						))}

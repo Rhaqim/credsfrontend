@@ -1,6 +1,7 @@
 import { BaseID } from ".";
 import OrganizationMember from "./team.type";
 import Credential from "./credential.type";
+import User from "./user.type";
 
 declare interface Organization extends BaseID {
 	creator_id?: Number;
@@ -10,6 +11,7 @@ declare interface Organization extends BaseID {
 	credentials?: Credential[];
 	credentials_count?: number;
 	members?: OrganizationMember[];
+	members_user?: User[];
 	members_count?: number;
 }
 
