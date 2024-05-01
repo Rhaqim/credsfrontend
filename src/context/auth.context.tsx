@@ -1,6 +1,7 @@
 "use client";
 
 import React, { createContext, useContext, useEffect, useState } from "react";
+import { redirect } from "next/navigation";
 
 import { BASEURL } from "@/config";
 import { AuthEndPoints } from "@/services/api";
@@ -89,3 +90,13 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 		<AuthContext.Provider value={contextValue}>{children}</AuthContext.Provider>
 	);
 };
+
+export async function protectedPage() {
+	const data = await AuthEndPoints.me();
+
+	const storedUser = data as unknown as User;
+
+	if (!storedUser) {
+		redirect("/login");
+	}
+}
