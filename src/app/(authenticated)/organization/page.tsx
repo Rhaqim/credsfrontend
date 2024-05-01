@@ -9,7 +9,7 @@ const Organizations = () => {
 	const { organizations } = useOrg();
 
 	return (
-		<div className="flex flex-col w-full p-4 min-h-screen overflow-y-auto">
+		<>
 			<div className="py-4 flex justify-between">
 				<div>
 					<h1 className="text-2xl font-bold">Organizations</h1>
@@ -25,7 +25,7 @@ const Organizations = () => {
 				{organizations.length > 0 &&
 					organizations.map((org, index) => (
 						<Link
-							href={`/organization/${index}`}
+							href={`/organization/${org.ID}`}
 							key={index}
 							className="bg-white p-4 rounded-lg hover:scale-105 hover:shadow-md shadow-indigo-500 transition-all duration-150 ease-linear"
 						>
@@ -49,7 +49,7 @@ const Organizations = () => {
 						</Link>
 					))}
 			</div>
-		</div>
+		</>
 	);
 };
 
