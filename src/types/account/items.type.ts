@@ -7,4 +7,5 @@ export type SideNavProps = {
     isOpen: boolean;
     toggleSideNav: () => void;
     items: SideNavItem[];
+    activeSection: string;
 };

@@ -1,7 +1,12 @@
 import React from "react";
 import { SideNavProps } from "@/types/account/items.type";
 
-const SideNav = ({ isOpen, toggleSideNav, items }: SideNavProps) => {
+const SideNav = ({
+	isOpen,
+	toggleSideNav,
+	items,
+	activeSection,
+}: SideNavProps) => {
 	return (
 		<div className="min-h-screen flex overflow-hidden bg-gray-100">
 			{/* Side bar */}
@@ -20,7 +25,11 @@ const SideNav = ({ isOpen, toggleSideNav, items }: SideNavProps) => {
 									key={index}
 									onClick={item.onClick}
 									href="#"
-									className="bg-gray-200 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md"
+									className={`bg-gray-200 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
+										activeSection === item.label
+											? "text-gray-900 bg-gray-200"
+											: "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+									}`}
 								>
 									{/* Your navigation item content */}
 									{item.label}
@@ -55,7 +64,11 @@ const SideNav = ({ isOpen, toggleSideNav, items }: SideNavProps) => {
 										key={index}
 										onClick={item.onClick}
 										href="#"
-										className="bg-gray-200 text-gray-900 group flex items-center px-2 py-2 text-base font-medium rounded-md"
+										className={`bg-gray-200 text-gray-900 group flex items-center px-2 py-2 text-sm font-medium rounded-md ${
+											activeSection === item.label
+												? "text-gray-900 bg-gray-200"
+												: "text-gray-600 hover:bg-gray-50 hover:text-gray-900"
+										}`}
 									>
 										{/* Your navigation item content */}
 										{item.label}
