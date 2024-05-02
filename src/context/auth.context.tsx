@@ -1,6 +1,12 @@
 "use client";
 
-import React, { createContext, useContext, useEffect, useState } from "react";
+import React, {
+	createContext,
+	useContext,
+	useEffect,
+	useMemo,
+	useState,
+} from "react";
 import { redirect } from "next/navigation";
 
 import { BASEURL } from "@/config";
@@ -37,10 +43,13 @@ interface AuthProviderType {
 	children: React.ReactNode;
 }
 
+const MAX_REVALIDATE_COUNTER = 5;
+
 export const AuthProvider = ({ children }: AuthProviderType) => {
 	const [user, setUser] = useState<User | null>(null);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
 	const [loading, setLoading] = useState(false);
+	const [revalidateCounter, setRevalidateCounter] = useState(0);
 
 	useEffect(() => {
 		const fetchUser = async () => {
@@ -59,13 +68,19 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 				setLoading(false);
 			}
 		};
-		fetchUser();
-	}, []);
+
+		if (revalidateCounter < MAX_REVALIDATE_COUNTER) {
+			fetchUser();
+			setRevalidateCounter(revalidateCounter + 1);
+		}
+	}, [revalidateCounter]);
+
+	const cachedUser = useMemo(() => user, [user]);
 
 	const login = (provider: "google" | "github") => {
 		let url = AuthRoutes.login(provider);
 
-		const authURL = `${BASEURL}/${url}`;
+		const authURL = `${BASEURL}${url}`;
 
 		window.location.href = authURL;
 	};
@@ -77,7 +92,7 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 	};
 
 	const contextValue: AuthContextType = {
-		user,
+		user: cachedUser,
 		isLoggedIn,
 		loading,
 		login,
