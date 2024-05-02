@@ -5,15 +5,53 @@ import React, { useReducer } from "react";
 import { initialState, reducer } from "./reducer";
 
 import { useOrg } from "@/context/org.context";
-import { Enviornment } from "@/types/credential.type";
+import { Environment } from "@/types/credential.type";
 
-const NewCredential = () => {
-	const [state, dispatch] = useReducer(reducer, initialState);
-
+const NewCredential = ({ params }: { params: { orgId: Number } }) => {
 	const { createCredential } = useOrg();
 
+	const [state, dispatch] = useReducer(reducer, initialState);
+
+	enum EnvironmentName {
+		DEVELOPMENT = "DEVELOPMENT",
+		STAGING = "STAGING",
+		PREPRODUCTION = "PREPRODUCTION",
+		PRODUCTION = "PRODUCTION",
+	}
+
+	const [environment, setEnvironment] = React.useState<EnvironmentName>(
+		EnvironmentName.DEVELOPMENT
+	);
+
+	const handleEnvironmentChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+		setEnvironment(e.target.value as EnvironmentName);
+
+		// map the environment name to the enum value in Environment
+
+		const env = () => {
+			switch (e.target.value) {
+				case EnvironmentName.DEVELOPMENT:
+					return Environment.DEVELOPMENT;
+				case EnvironmentName.STAGING:
+					return Environment.STAGING;
+				case EnvironmentName.PREPRODUCTION:
+					return Environment.PREPRODUCTION;
+				case EnvironmentName.PRODUCTION:
+					return Environment.PRODUCTION;
+				default:
+					return Environment.DEVELOPMENT;
+			}
+		};
+
+		dispatch({
+			type: "SET_ENVIRONMENT",
+			payload: env(),
+		});
+	};
+
 	const handleSubmit = () => {
-		createCredential(state);
+		const newState = { ...state, organization_id: Number(params.orgId) };
+		createCredential(newState);
 	};
 	return (
 		<div className="flex flex-col min-h-screen overflow-y-auto justify-center">
@@ -50,17 +88,12 @@ const NewCredential = () => {
 					</label>
 					<select
 						id="environment"
-						value={state.environment}
-						onChange={e =>
-							dispatch({
-								type: "SET_ENVIRONMENT",
-								payload: e.target.value as Enviornment,
-							})
-						}
+						value={environment}
+						onChange={handleEnvironmentChange}
 						required
 						className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-black"
 					>
-						{Object.keys(Enviornment).map((env, i) => (
+						{Object.keys(EnvironmentName).map((env, i) => (
 							<option key={i} value={env}>
 								{env}
 							</option>

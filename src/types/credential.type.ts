@@ -2,18 +2,18 @@ import { BaseID } from ".";
 
 declare interface Credential extends BaseID {
     name: string;
-    organization_id: number;
-    user_id: string;
-    environment: Enviornment;
-    version: string;
+    organization_id: Number;
+    environment: Environment;
+    user_id?: Number;
+    version?: string;
 
 }
 
-export enum Enviornment {
-    DEVELOPMENT = "development",
-    STAGING = "staging",
-    PREPRODUCTION = "preproduction",
-    PRODUCTION = "production",
+export enum Environment {
+    DEVELOPMENT = 1,
+    STAGING = 2,
+    PREPRODUCTION = 3,
+    PRODUCTION = 4,
 }
 
 export interface CredentialField extends BaseID {
