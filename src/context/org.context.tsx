@@ -20,7 +20,7 @@ type OrgContextType = {
 	setCredentials: (data: Credential[]) => void;
 	setMembers: (data: User[]) => void;
 
-	createCredential: (data: Credential) => void;
+	createCredential: (data: Credential) => Promise<void>;
 	getCredentials: () => void;
 	getCredential: (id: number) => void;
 	setCredential: (data: Credential) => void;
@@ -43,7 +43,7 @@ export const OrgContext = createContext<OrgContextType>({
 	setCredentials: (data: Credential[]) => {},
 	setMembers: (data: User[]) => {},
 
-	createCredential: (data: Credential) => {},
+	createCredential: async (data: Credential) => {},
 	getCredentials: () => {},
 	getCredential: (id: number) => {},
 	setCredential: (data: Credential) => {},
