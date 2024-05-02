@@ -4,16 +4,16 @@ declare interface Credential extends BaseID {
     name: string;
     organization_id: number;
     user_id: string;
-    enviornmant: Enviornment;
+    environment: Enviornment;
     version: string;
 
 }
 
 export enum Enviornment {
-    DEVELOPMENT = 0,
-    STAGING = 1,
-    PREPRODUCTION = 2,
-    PRODUCTION = 3,
+    DEVELOPMENT = "development",
+    STAGING = "staging",
+    PREPRODUCTION = "preproduction",
+    PRODUCTION = "production",
 }
 
 export interface CredentialField extends BaseID {

@@ -2,7 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState } from "react";
 
-import { OrgEndPoints } from "@/services/api";
+import { OrgEndPoints, CredsEndPoints, TeamEndPoints } from "@/services/api";
 import Organization from "@/types/organization.type";
 import Credential from "@/types/credential.type";
 import Member from "@/types/team.type";
@@ -19,6 +19,16 @@ type OrgContextType = {
 	getOrganization: (id: number) => void;
 	setCredentials: (data: Credential[]) => void;
 	setMembers: (data: User[]) => void;
+
+	createCredential: (data: Credential) => void;
+	getCredentials: () => void;
+	getCredential: (id: number) => void;
+	setCredential: (data: Credential) => void;
+
+	createMember: (data: Member) => void;
+	getMembers: () => void;
+	getMember: (id: number) => void;
+	setMember: (data: Member) => void;
 };
 
 export const OrgContext = createContext<OrgContextType>({
@@ -32,6 +42,16 @@ export const OrgContext = createContext<OrgContextType>({
 	getOrganization: (id: number) => {},
 	setCredentials: (data: Credential[]) => {},
 	setMembers: (data: User[]) => {},
+
+	createCredential: (data: Credential) => {},
+	getCredentials: () => {},
+	getCredential: (id: number) => {},
+	setCredential: (data: Credential) => {},
+
+	createMember: (data: Member) => {},
+	getMembers: () => {},
+	getMember: (id: number) => {},
+	setMember: (data: Member) => {},
 });
 
 export const useOrg = () => {
@@ -51,6 +71,8 @@ export const OrgProvider = ({ children }: OrgProviderType) => {
 	const [organizations, setOrganizations] = useState<Organization[]>([]);
 	const [organization, setOrganization] = useState<Organization | null>(null);
 	const [credentials, setCredentials] = useState<Credential[]>([]);
+	const [credential, setCredential] = useState<Credential | null>(null);
+	const [member, setMember] = useState<Member | null>(null);
 	const [members, setMembers] = useState<User[]>([]);
 	const [loading, setLoading] = useState(false);
 
@@ -95,6 +117,74 @@ export const OrgProvider = ({ children }: OrgProviderType) => {
 		}
 	};
 
+	const createCredential = async (data: Credential) => {
+		try {
+			await CredsEndPoints.create(data);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	const getCredentials = async () => {
+		setLoading(true);
+		try {
+			const { data } = await CredsEndPoints.all();
+			const { creds } = data;
+			setCredentials(creds as unknown as Credential[]);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const getCredential = async (id: number) => {
+		setLoading(true);
+		try {
+			const { data } = await CredsEndPoints.find(id);
+			const { cred } = data;
+			setCredential(cred as unknown as Credential);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const createMember = async (data: Member) => {
+		try {
+			await TeamEndPoints.add(data);
+		} catch (error) {
+			console.error(error);
+		}
+	};
+
+	const getMembers = async () => {
+		setLoading(true);
+		try {
+			const { data } = await TeamEndPoints.all();
+			const { members } = data;
+			setMembers(members as unknown as User[]);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
+	const getMember = async (id: number) => {
+		setLoading(true);
+		try {
+			const { data } = await TeamEndPoints.find(id);
+			const { member } = data;
+			setMember(member as unknown as Member);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setLoading(false);
+		}
+	};
+
 	return (
 		<OrgContext.Provider
 			value={{
@@ -108,6 +198,16 @@ export const OrgProvider = ({ children }: OrgProviderType) => {
 				getOrganization,
 				setCredentials,
 				setMembers,
+
+				createCredential,
+				getCredentials,
+				getCredential,
+				setCredential,
+
+				createMember,
+				getMembers,
+				getMember,
+				setMember,
 			}}
 		>
 			{children}
