@@ -4,7 +4,7 @@ import React, { createContext, useContext, useEffect, useState } from "react";
 
 import { OrgEndPoints, CredsEndPoints, TeamEndPoints } from "@/services/api";
 import Organization from "@/types/organization.type";
-import Credential from "@/types/credential.type";
+import Credential, { CredentialReturn } from "@/types/credential.type";
 import Member from "@/types/team.type";
 import User from "@/types/user.type";
 
@@ -23,12 +23,18 @@ type OrgContextType = {
 	createCredential: (data: Credential) => Promise<Credential | undefined>;
 	getCredentials: () => void;
 	getCredential: (id: number) => void;
-	setCredential: (data: Credential) => void;
+	setCredential: (data: CredentialReturn) => void;
+	credential: CredentialReturn | null;
 
 	createMember: (data: Member) => void;
 	getMembers: () => void;
 	getMember: (id: number) => void;
 	setMember: (data: Member) => void;
+	member: Member | null;
+
+	uploading: boolean;
+	setUploading: (data: boolean) => void;
+	upload: (id: number, data: File) => Promise<void>;
 };
 
 export const OrgContext = createContext<OrgContextType>({
@@ -50,12 +56,18 @@ export const OrgContext = createContext<OrgContextType>({
 	},
 	getCredentials: () => {},
 	getCredential: (id: number) => {},
-	setCredential: (data: Credential) => {},
+	setCredential: (data: CredentialReturn) => {},
+	credential: null,
 
 	createMember: (data: Member) => {},
 	getMembers: () => {},
 	getMember: (id: number) => {},
 	setMember: (data: Member) => {},
+	member: null,
+
+	uploading: false,
+	setUploading: (data: boolean) => {},
+	upload: async (id: number, data: File) => {},
 });
 
 export const useOrg = () => {
@@ -74,10 +86,15 @@ interface OrgProviderType {
 export const OrgProvider = ({ children }: OrgProviderType) => {
 	const [organizations, setOrganizations] = useState<Organization[]>([]);
 	const [organization, setOrganization] = useState<Organization | null>(null);
+
 	const [credentials, setCredentials] = useState<Credential[]>([]);
-	const [credential, setCredential] = useState<Credential | null>(null);
+	const [credential, setCredential] = useState<CredentialReturn | null>(null);
+
 	const [member, setMember] = useState<Member | null>(null);
 	const [members, setMembers] = useState<User[]>([]);
+
+	const [uploading, setUploading] = useState(false);
+
 	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
@@ -151,9 +168,9 @@ export const OrgProvider = ({ children }: OrgProviderType) => {
 	const getCredential = async (id: number) => {
 		setLoading(true);
 		try {
-			const { data } = await CredsEndPoints.find(id);
-			const { cred } = data;
-			setCredential(cred as unknown as Credential);
+			const response = await CredsEndPoints.find(id);
+			const { credential: cred } = response.data;
+			setCredential(cred as unknown as CredentialReturn);
 		} catch (error) {
 			console.error(error);
 		} finally {
@@ -195,6 +212,17 @@ export const OrgProvider = ({ children }: OrgProviderType) => {
 		}
 	};
 
+	const upload = async (id: number, data: File) => {
+		setUploading(true);
+		try {
+			await CredsEndPoints.upload(id, data);
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setUploading(false);
+		}
+	};
+
 	return (
 		<OrgContext.Provider
 			value={{
@@ -213,11 +241,17 @@ export const OrgProvider = ({ children }: OrgProviderType) => {
 				getCredentials,
 				getCredential,
 				setCredential,
+				credential,
 
 				createMember,
 				getMembers,
 				getMember,
 				setMember,
+				member,
+
+				uploading,
+				setUploading,
+				upload,
 			}}
 		>
 			{children}

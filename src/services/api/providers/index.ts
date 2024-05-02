@@ -70,4 +70,15 @@ export const apiFunctions = {
 		api.post(url, data, {
 			headers: { "Content-Type": "application/x-www-form-urlencoded" },
 		}),
+	upload: (url: string, data: File): Promise<Data> => {
+		const formData = new FormData();
+		console.log("File", data);
+		formData.append("file", data);
+
+		return api.post(url, formData, {
+			headers: {
+				"Content-Type": "multipart/form-data",
+			},
+		});
+	},
 };

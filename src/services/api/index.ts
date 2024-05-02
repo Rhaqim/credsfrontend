@@ -4,7 +4,7 @@ import { AuthRoutes, OrgRoutes, CredsRoutes, TeamRoutes} from "./routes";
 
 import Organization from "@/types/organization.type";
 
-const { get, post } = apiFunctions;
+const { get, post, upload } = apiFunctions;
 
 export const AuthEndPoints = {
 	me: () => get(AuthRoutes.me),
@@ -21,7 +21,7 @@ export const CredsEndPoints = {
 	create: (data: any) => post(CredsRoutes.create, data),
 	all: () => get(CredsRoutes.all),
 	find: (id: number) => get(CredsRoutes.one(id)),
-	upload: (id: number, data: any) => post(CredsRoutes.upload(id), data),
+	upload: (id: number, data: File) => upload(CredsRoutes.upload(id), data),
 };
 
 export const TeamEndPoints = {
