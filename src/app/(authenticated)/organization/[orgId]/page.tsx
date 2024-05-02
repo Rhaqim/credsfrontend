@@ -14,12 +14,19 @@ const Organization = ({ params }: { params: { orgId: number } }) => {
 		organization,
 		credentials,
 		members,
+		setCredentials,
 		getOrganization,
 		createCredential,
 	} = useOrg();
 
 	const [state, dispatch] = useReducer(reducer, initialState);
+
 	const [showCredCreateModal, setShowCredCreateModal] = React.useState(false);
+	const [newCredError, setNewCredError] = React.useState("");
+
+	const [showMemberInviteModal, setShowMemberInviteModal] =
+		React.useState(false);
+	const [email, setEmail] = React.useState("");
 
 	enum EnvironmentName {
 		DEVELOPMENT = "DEVELOPMENT",
@@ -59,9 +66,14 @@ const Organization = ({ params }: { params: { orgId: number } }) => {
 	};
 
 	const handleSubmit = async () => {
-		// const newState = { ...state, organization_id: Number(params.orgId) };
-		// const response = await createCredential(newState);
-		setShowCredCreateModal(false);
+		const newState = { ...state, organization_id: Number(params.orgId) };
+		const response = await createCredential(newState);
+		if (response) {
+			setCredentials([...credentials, response]);
+			setShowCredCreateModal(false);
+		} else {
+			setNewCredError("Error creating credential");
+		}
 	};
 
 	useEffect(() => {
@@ -103,12 +115,12 @@ const Organization = ({ params }: { params: { orgId: number } }) => {
 				<div>
 					<div className="flex justify-between items-center">
 						<h2 className="text-xl font-bold mb-4">Members</h2>
-						<Link
-							href={`/organization/${params.orgId}/team/invite`}
+						<button
+							onClick={() => setShowMemberInviteModal(true)}
 							className="bg-blue-500 text-white p-2 rounded-lg"
 						>
 							Invite Member
-						</Link>
+						</button>
 					</div>
 					<ul className="list-disc pl-4">
 						{members.map((member, index) => (
@@ -125,6 +137,9 @@ const Organization = ({ params }: { params: { orgId: number } }) => {
 				<Modal onClose={() => setShowCredCreateModal(false)}>
 					<div className="flex flex-col">
 						<h1 className="text-2xl font-bold mb-4">Create Credential</h1>
+						{newCredError && (
+							<p className="text-red-500 text-sm mb-4">{newCredError}</p>
+						)}
 						<div className="mb-4">
 							<label
 								htmlFor="credential_name"
@@ -174,6 +189,36 @@ const Organization = ({ params }: { params: { orgId: number } }) => {
 							className="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
 						>
 							Create Credential
+						</button>
+					</div>
+				</Modal>
+			)}
+			{showMemberInviteModal && (
+				<Modal onClose={() => setShowMemberInviteModal(false)}>
+					<div className="flex flex-col">
+						<h1 className="text-2xl font-bold mb-4">Invite Member</h1>
+						<div className="mb-4">
+							<label
+								htmlFor="email"
+								className="block text-sm font-semibold mb-1"
+							>
+								Email
+							</label>
+							<input
+								id="email"
+								type="email"
+								value={email}
+								onChange={e => setEmail(e.target.value)}
+								required
+								className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-black"
+							/>
+						</div>
+
+						<button
+							onClick={handleSubmit}
+							className="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+						>
+							Invite Member
 						</button>
 					</div>
 				</Modal>

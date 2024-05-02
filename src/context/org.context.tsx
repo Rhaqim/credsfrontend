@@ -20,7 +20,7 @@ type OrgContextType = {
 	setCredentials: (data: Credential[]) => void;
 	setMembers: (data: User[]) => void;
 
-	createCredential: (data: Credential) => Promise<void>;
+	createCredential: (data: Credential) => Promise<Credential | undefined>;
 	getCredentials: () => void;
 	getCredential: (id: number) => void;
 	setCredential: (data: Credential) => void;
@@ -43,7 +43,11 @@ export const OrgContext = createContext<OrgContextType>({
 	setCredentials: (data: Credential[]) => {},
 	setMembers: (data: User[]) => {},
 
-	createCredential: async (data: Credential) => {},
+	createCredential: async (
+		data: Credential
+	): Promise<Credential | undefined> => {
+		return;
+	},
 	getCredentials: () => {},
 	getCredential: (id: number) => {},
 	setCredential: (data: Credential) => {},
@@ -117,9 +121,15 @@ export const OrgProvider = ({ children }: OrgProviderType) => {
 		}
 	};
 
-	const createCredential = async (data: Credential) => {
+	const createCredential = async (
+		data: Credential
+	): Promise<Credential | undefined> => {
 		try {
-			await CredsEndPoints.create(data);
+			const response = await CredsEndPoints.create(data);
+			const { credential: cred } = response.data;
+			if (cred) {
+				return cred as unknown as Credential;
+			}
 		} catch (error) {
 			console.error(error);
 		}
