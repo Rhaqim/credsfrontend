@@ -9,11 +9,5 @@ export default function OrganizationLayout({
 }: {
 	children: React.ReactNode;
 }) {
-	return (
-		<OrgProvider>
-			<div className="flex flex-col w-full p-4 min-h-screen overflow-y-auto">
-				{children}
-			</div>
-		</OrgProvider>
-	);
+	return <OrgProvider>{children}</OrgProvider>;
 }

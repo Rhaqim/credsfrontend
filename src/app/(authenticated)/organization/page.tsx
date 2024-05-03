@@ -9,7 +9,7 @@ const Organizations = () => {
 	const { organizations } = useOrg();
 
 	return (
-		<>
+		<div className="flex flex-col w-full p-4 min-h-screen overflow-y-auto">
 			<div className="py-4 flex justify-between">
 				<div>
 					<h1 className="text-2xl font-bold">Organizations</h1>
@@ -49,7 +49,7 @@ const Organizations = () => {
 						</Link>
 					))}
 			</div>
-		</>
+		</div>
 	);
 };
 

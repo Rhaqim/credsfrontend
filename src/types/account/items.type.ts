@@ -4,6 +4,7 @@ export type SideNavItem = {
 };
 
 export type SideNavProps = {
+    header?: SideNavItem;
     isOpen: boolean;
     toggleSideNav: () => void;
     items: SideNavItem[];

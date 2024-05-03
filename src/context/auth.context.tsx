@@ -43,8 +43,6 @@ interface AuthProviderType {
 	children: React.ReactNode;
 }
 
-const MAX_REVALIDATE_COUNTER = 5;
-
 export const AuthProvider = ({ children }: AuthProviderType) => {
 	const [user, setUser] = useState<User | null>(null);
 	const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -52,6 +50,9 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 	const [revalidateCounter, setRevalidateCounter] = useState(0);
 
 	useEffect(() => {
+		const MAX_REVALIDATE_COUNTER = 5; // Adjust this value as needed
+		const REVALIDATION_INTERVAL = 60000; // Adjust this value as needed (1 minute in milliseconds)
+
 		const fetchUser = async () => {
 			setLoading(true);
 			try {
@@ -69,10 +70,21 @@ export const AuthProvider = ({ children }: AuthProviderType) => {
 			}
 		};
 
-		if (revalidateCounter < MAX_REVALIDATE_COUNTER) {
-			fetchUser();
-			setRevalidateCounter(revalidateCounter + 1);
-		}
+		const revalidateUser = () => {
+			if (revalidateCounter < MAX_REVALIDATE_COUNTER) {
+				fetchUser();
+				setRevalidateCounter(revalidateCounter + 1);
+			}
+		};
+
+		// Initially fetch the user
+		fetchUser();
+
+		// Set up a timer to revalidate the user data after a certain interval
+		const revalidationTimer = setTimeout(revalidateUser, REVALIDATION_INTERVAL);
+
+		// Clean up the timer when the component unmounts or when revalidation counter reaches the limit
+		return () => clearTimeout(revalidationTimer);
 	}, [revalidateCounter]);
 
 	const cachedUser = useMemo(() => user, [user]);
