@@ -3,8 +3,9 @@
 import React, { useEffect, useState } from "react";
 
 import { useOrg } from "@/context/org.context";
+import { CredentialField, Field } from "@/types/credential.type";
+
 import { envString } from "./util";
-import axios from "axios";
 
 const Credential = ({
 	params,
@@ -15,6 +16,28 @@ const Credential = ({
 
 	const [file, setFile] = useState<File | null>(null);
 
+	const [fields, setFields] = useState<Field[]>([{ key: "", value: "" }]);
+
+	const handleChange = (
+		index: number,
+		e: React.ChangeEvent<HTMLInputElement>,
+		fieldKey: keyof Field
+	) => {
+		const newFields = [...fields];
+		newFields[index][fieldKey] = e.target.value;
+		setFields(newFields);
+	};
+
+	const handleAddField = () => {
+		setFields([...fields, { key: "", value: "" }]);
+	};
+
+	const handleRemoveField = (index: number) => {
+		const newFields = [...fields];
+		newFields.splice(index, 1);
+		setFields(newFields);
+	};
+
 	const handleUploadChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		if (e.target.files?.length) {
 			const file = e.target.files[0];
@@ -22,42 +45,6 @@ const Credential = ({
 		}
 	};
 
-	const api = axios.create({
-		baseURL: "http://localhost:8080",
-	});
-
-	api.interceptors.request.use(
-		config => {
-			// include cookies
-			config.withCredentials = true;
-
-			return config;
-		},
-		error => {
-			return Promise.reject(error);
-		}
-	);
-	// const handleUpload = async () => {
-	// 	const formData = new FormData();
-	// 	if (file) {
-	// 		formData.append("file", file);
-	// 	}
-	// 	try {
-	// 		const response = await api.post(
-	// 			"/api/organization/credentials/2/upload",
-	// 			formData,
-	// 			{
-	// 				headers: {
-	// 					"Content-Type": "multipart/form-data",
-	// 				},
-	// 			}
-	// 		);
-	// 		return response.data;
-	// 	} catch (error) {
-	// 		console.error("Error uploading file:", error);
-	// 		throw error;
-	// 	}
-	// };
 	const handleUpload = async () => {
 		if (file) {
 			upload(params.credId, file);
@@ -73,69 +60,105 @@ const Credential = ({
 	}
 
 	return (
-		<div className="max-w-lg mx-auto p-4">
+		<div className="md:w-full mx-auto p-4">
 			<div className="mb-4">
 				<h2 className="text-xl font-bold">{cred.credential?.name}</h2>
 				<p>Environment: {envString(cred.credential.environment)}</p>
 				<p>Current Version: {cred.credential.version}</p>
 			</div>
-			<div className="mb-4">
-				{cred?.fields && (
-					<div className="border-b border-gray-200 pb-4 mb-4">
-						<h3 className="text-lg font-bold mb-2">Fields</h3>
-						<table className="w-full">
-							<tbody>
-								{cred.fields.map((field, index) => (
-									<tr key={index}>
-										<td className="py-2">{field.key}</td>
-										<td className="py-2">
-											<button
-												className="text-blue-500 hover:underline"
-												onClick={() => alert(field.value)}
-											>
-												Reveal
-											</button>
-										</td>
-									</tr>
-								))}
-							</tbody>
-						</table>
-					</div>
-				)}
-			</div>
-			<div>
-				{cred?.file && cred.file.ID !== 0 ? (
-					<div>
-						<h3 className="text-lg font-bold mb-2">File</h3>
-						<p className="mb-1">Name: {cred.file.file_name}</p>
-						<p className="mb-1">Size: {cred.file.file_size} KB</p>
-						<p className="mb-1">Format: {cred.file.file_format}</p>
-						<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">
-							Download
-						</button>
-					</div>
-				) : (
-					<div>
-						{uploading ? (
-							<p>Uploading...</p>
-						) : (
-							<>
-								<h3 className="text-lg font-bold mb-2">Upload File</h3>
+			<div className="flex flex-col md:flex-row justify-between">
+				<div className="mb-4">
+					<div className="max-w-md mx-auto mt-8">
+						{fields.map((field, index) => (
+							<div key={index} className="mb-4 flex items-center">
 								<input
-									type="file"
-									onChange={handleUploadChange}
-									className="border border-gray-400 rounded-md p-2 mb-2 w-full"
+									type="text"
+									className="border border-gray-300 rounded mr-2 px-4 py-2 flex-grow"
+									placeholder="Key"
+									value={field.key}
+									onChange={e => handleChange(index, e, "key")}
+								/>
+								<input
+									type="text"
+									className="border border-gray-300 rounded mr-2 px-4 py-2 flex-grow"
+									placeholder="Value"
+									value={field.value}
+									onChange={e => handleChange(index, e, "value")}
 								/>
 								<button
-									onClick={handleUpload}
-									className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+									className="bg-red-500 text-white px-4 py-2 rounded hover:bg-red-600 transition duration-200"
+									onClick={() => handleRemoveField(index)}
 								>
-									Upload
+									Remove
 								</button>
-							</>
+							</div>
+						))}
+						<button
+							className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200"
+							onClick={handleAddField}
+						>
+							Add More
+						</button>
+					</div>
+					<div className="mb-4">
+						{cred?.fields && (
+							<div className="border-b border-gray-200 pb-4 mb-4">
+								<h3 className="text-lg font-bold mb-2">Fields</h3>
+								<table className="w-full">
+									<tbody>
+										{cred.fields.map((field, index) => (
+											<tr key={index}>
+												<td className="py-2">{field.key}</td>
+												<td className="py-2">
+													<button
+														className="text-blue-500 hover:underline"
+														onClick={() => alert(field.value)}
+													>
+														Reveal
+													</button>
+												</td>
+											</tr>
+										))}
+									</tbody>
+								</table>
+							</div>
 						)}
 					</div>
-				)}
+				</div>
+				<div>
+					{cred?.file && cred.file.ID !== 0 ? (
+						<div>
+							<h3 className="text-lg font-bold mb-2">File</h3>
+							<p className="mb-1">Name: {cred.file.file_name}</p>
+							<p className="mb-1">Size: {cred.file.file_size} KB</p>
+							<p className="mb-1">Format: {cred.file.file_format}</p>
+							<button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mt-2">
+								Download
+							</button>
+						</div>
+					) : (
+						<div>
+							{uploading ? (
+								<p>Uploading...</p>
+							) : (
+								<>
+									<h3 className="text-lg font-bold mb-2">Upload File</h3>
+									<input
+										type="file"
+										onChange={handleUploadChange}
+										className="border border-gray-400 rounded-md p-2 mb-2 w-full"
+									/>
+									<button
+										onClick={handleUpload}
+										className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+									>
+										Upload
+									</button>
+								</>
+							)}
+						</div>
+					)}
+				</div>
 			</div>
 		</div>
 	);

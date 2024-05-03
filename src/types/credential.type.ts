@@ -31,7 +31,7 @@ declare interface Credential extends BaseID {
     version?: string;
 }
 
-interface Field {
+export interface Field {
     key: string;
     value: string;
 }
