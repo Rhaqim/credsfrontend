@@ -2,7 +2,7 @@ import Link from "next/link";
 import { SideNavLink } from "@/types/account/items.type";
 
 export const orgItems = (
-	{ orgId }: { orgId: Number},
+	{ orgId }: { orgId: number},
 ): SideNavLink[] => {
 	return [
 		{

@@ -12,7 +12,7 @@ export default function OrganizationLayout({
 	children, params
 }: {
 	children: React.ReactNode;
-	params: { orgId: Number };
+	params: { orgId: number };
 }) {
 	const router = useRouter();
 	const { orgId } = params;

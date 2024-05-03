@@ -4,7 +4,7 @@ import Credential from "./credential.type";
 import User from "./user.type";
 
 declare interface Organization extends BaseID {
-	creator_id?: Number;
+	creator_id?: number;
 	organization_name: string;
 	description: string;
 	organization_type: OrganizationType;

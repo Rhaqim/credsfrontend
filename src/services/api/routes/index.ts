@@ -8,19 +8,20 @@ export const AuthRoutes = {
 // API Routes
 export const OrgRoutes = {
 	all: `/api/organization`,
-	one: (orgId: Number) => `/api/organization/${orgId}`,
+	one: (orgId: number) => `/api/organization/${orgId}`,
 	create: `/api/organization/create`,
 };
 
 export const CredsRoutes = {
 	all: `/api/organization/credentials`,
-	one: (credId: Number) => `/api/organization/credentials/${credId}`,
+	one: (credId: number) => `/api/organization/credentials/${credId}`,
 	create: `/api/organization/credentials/create`,
-	upload: (credId: Number) => `/api/organization/credentials/${credId}/upload`,
+	upload: (credId: number) => `/api/organization/credentials/${credId}/upload`,
 };
 
 export const TeamRoutes = {
 	all: `/api/organization/team`,
-	one: (memId: Number) => `/api/organization/team/${memId}`,
+	one: (memId: number) => `/api/organization/team/${memId}`,
 	add: '/organization/team/add',
+	invite: '/organization/team/invite',
 }

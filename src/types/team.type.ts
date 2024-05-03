@@ -4,6 +4,7 @@ declare interface OrganizationMember extends BaseID {
     organization_id: number;
     user_id: number;
     role: OrganizationRole;
+    team_id: number;
     status: OrganizationMemberStatus;
 }
 

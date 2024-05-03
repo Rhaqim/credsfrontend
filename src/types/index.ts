@@ -1,5 +1,5 @@
 export interface BaseID {
-	ID?: Number;
+	ID?: number;
 	CreatedAt?: Date;
 	UpdatedAt?: Date;
 }

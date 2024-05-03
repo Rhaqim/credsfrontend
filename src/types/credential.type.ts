@@ -25,9 +25,9 @@ export interface CredentialFile extends BaseID {
 
 declare interface Credential extends BaseID {
     name: string;
-    organization_id: Number;
+    organization_id: number;
     environment: Environment;
-    user_id?: Number;
+    user_id?: number;
     version?: string;
 }
 

@@ -1,8 +1,8 @@
-import { all } from "axios";
 import { apiFunctions } from "./providers";
-import { AuthRoutes, OrgRoutes, CredsRoutes, TeamRoutes} from "./routes";
+import { AuthRoutes, OrgRoutes, CredsRoutes, TeamRoutes } from "./routes";
 
 import Organization from "@/types/organization.type";
+import OrganizationMember from "@/types/team.type";
 
 const { get, post, upload } = apiFunctions;
 
@@ -27,5 +27,7 @@ export const CredsEndPoints = {
 export const TeamEndPoints = {
 	all: () => get(TeamRoutes.all),
 	find: (id: number) => get(TeamRoutes.one(id)),
+	invite: (email: string, data: OrganizationMember) =>
+		post(`${TeamRoutes.invite}?email=${email}`, data),
 	add: (data: any) => post(TeamRoutes.add, data),
 };
