@@ -44,7 +44,7 @@ export default function OrganizationLayout({
 					}
 					isOpen={isOpen}
 					toggleSideNav={toggleSideNav}
-					items={orgItems(setActiveSection)}
+					links={orgItems({ orgId })}
 					activeSection={activeSection}
 				/>
 				<div className="flex flex-col w-full p-4 min-h-screen overflow-y-auto">

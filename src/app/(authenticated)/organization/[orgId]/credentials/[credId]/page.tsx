@@ -37,32 +37,32 @@ const Credential = ({
 			return Promise.reject(error);
 		}
 	);
-	const handleUpload = async () => {
-		const formData = new FormData();
-		if (file) {
-			formData.append("file", file);
-		}
-		try {
-			const response = await api.post(
-				"/api/organization/credentials/2/upload",
-				formData,
-				{
-					headers: {
-						"Content-Type": "multipart/form-data",
-					},
-				}
-			);
-			return response.data;
-		} catch (error) {
-			console.error("Error uploading file:", error);
-			throw error;
-		}
-	};
 	// const handleUpload = async () => {
+	// 	const formData = new FormData();
 	// 	if (file) {
-	// 		upload(params.credId, file);
+	// 		formData.append("file", file);
+	// 	}
+	// 	try {
+	// 		const response = await api.post(
+	// 			"/api/organization/credentials/2/upload",
+	// 			formData,
+	// 			{
+	// 				headers: {
+	// 					"Content-Type": "multipart/form-data",
+	// 				},
+	// 			}
+	// 		);
+	// 		return response.data;
+	// 	} catch (error) {
+	// 		console.error("Error uploading file:", error);
+	// 		throw error;
 	// 	}
 	// };
+	const handleUpload = async () => {
+		if (file) {
+			upload(params.credId, file);
+		}
+	};
 
 	useEffect(() => {
 		getCredential(params.credId);
@@ -77,7 +77,7 @@ const Credential = ({
 			<div className="mb-4">
 				<h2 className="text-xl font-bold">{cred.credential?.name}</h2>
 				<p>Environment: {envString(cred.credential.environment)}</p>
-				<p>Version: {cred.credential.version}</p>
+				<p>Current Version: {cred.credential.version}</p>
 			</div>
 			<div className="mb-4">
 				{cred?.fields && (
