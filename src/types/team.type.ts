@@ -1,6 +1,19 @@
 import { BaseID } from ".";
 
-declare interface OrganizationMember extends BaseID {
+declare interface OrganizationTeam extends BaseID {
+    name: string;
+    manager_id?: number;
+    created_by_id: number;
+    organization_id: number;
+    privileges: Privileges;
+}
+
+export enum Privileges {
+    MANAGE = "MANAGE",
+    READ = "READ",
+}
+
+export interface OrganizationMember extends BaseID {
     organization_id: number;
     user_id: number;
     role: OrganizationRole;
@@ -19,4 +32,4 @@ export enum OrganizationMemberStatus {
     INACTIVE = "INACTIVE",
 }
 
-export default OrganizationMember;
+export default OrganizationTeam;

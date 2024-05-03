@@ -2,7 +2,7 @@ import { apiFunctions } from "./providers";
 import { AuthRoutes, OrgRoutes, CredsRoutes, TeamRoutes } from "./routes";
 
 import Organization from "@/types/organization.type";
-import OrganizationMember from "@/types/team.type";
+import { OrganizationMember } from "@/types/team.type";
 
 const { get, post, upload } = apiFunctions;
 

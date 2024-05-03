@@ -1,5 +1,5 @@
 import { BaseID } from ".";
-import OrganizationMember from "./team.type";
+import OrganizationTeam, { OrganizationMember } from "./team.type";
 import Credential from "./credential.type";
 import User from "./user.type";
 
@@ -8,11 +8,13 @@ declare interface Organization extends BaseID {
 	organization_name: string;
 	description: string;
 	organization_type: OrganizationType;
-	credentials?: Credential[];
-	credentials_count?: number;
 	members?: OrganizationMember[];
 	members_user?: User[];
 	members_count?: number;
+	credentials?: Credential[];
+	credentials_count?: number;
+	teams?: OrganizationTeam[];
+	teams_count?: number;
 }
 
 export enum OrganizationType {
