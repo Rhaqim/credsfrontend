@@ -6,6 +6,7 @@ import Link from "next/link";
 import Modal from "@/components/Modal";
 import { useOrg } from "@/context/org.context";
 import { Environment } from "@/types/credential.type";
+import OrganizationTeam, { Privileges } from "@/types/team.type";
 
 import { initialState, reducer } from "./reducer";
 
@@ -15,15 +16,20 @@ const Organization = ({ params }: { params: { orgId: number } }) => {
 		credentials,
 		teams,
 		members,
-		setCredentials,
 		getOrganization,
 		createCredential,
+		createTeam,
+		setCredentials,
+		setTeams,
 	} = useOrg();
 
 	const [state, dispatch] = useReducer(reducer, initialState);
 
 	const [showCredCreateModal, setShowCredCreateModal] = React.useState(false);
 	const [newCredError, setNewCredError] = React.useState("");
+
+	const [showTeamCreateModal, setShowTeamCreateModal] = React.useState(false);
+	const [name, setName] = React.useState("");
 
 	const [showMemberInviteModal, setShowMemberInviteModal] =
 		React.useState(false);
@@ -77,6 +83,21 @@ const Organization = ({ params }: { params: { orgId: number } }) => {
 		}
 	};
 
+	const handleSubmitTeam = async () => {
+		const data: OrganizationTeam = {
+			name,
+			organization_id: Number(params.orgId),
+			privileges: Privileges.READ,
+		};
+		const response = await createTeam(data);
+		if (response) {
+			setTeams([...teams, response]);
+			setShowTeamCreateModal(false);
+		} else {
+			setNewCredError("Error creating credential");
+		}
+	};
+
 	useEffect(() => {
 		getOrganization(params.orgId);
 	}, [params.orgId]);
@@ -101,36 +122,36 @@ const Organization = ({ params }: { params: { orgId: number } }) => {
 						</button>
 					</div>
 					<ul className="list-disc pl-4">
-						{teams.map((team, index) => (
-							<li key={index} className="text-lg text-gray-700">
-								<Link
-									href={`/organization/${params.orgId}/credentials/${team.ID}`}
-								>
-									{team.name}
-								</Link>
-							</li>
-						))}
-					</ul>
-				</div>
-				
-				<div>
-					{/* Create new */}
-					<div className="flex justify-between items-center">
-						<h2 className="text-xl font-bold mb-4">Teams</h2>
-						<button
-							onClick={() => setShowCredCreateModal(true)}
-							className="bg-blue-500 text-white p-2 rounded-lg"
-						>
-							New Team
-						</button>
-					</div>
-					<ul className="list-disc pl-4">
 						{credentials.map((credential, index) => (
 							<li key={index} className="text-lg text-gray-700">
 								<Link
 									href={`/organization/${params.orgId}/credentials/${credential.ID}`}
 								>
 									{credential.name}
+								</Link>
+							</li>
+						))}
+					</ul>
+				</div>
+
+				<div>
+					{/* Create new */}
+					<div className="flex justify-between items-center">
+						<h2 className="text-xl font-bold mb-4">Teams</h2>
+						<button
+							onClick={() => setShowTeamCreateModal(true)}
+							className="bg-blue-500 text-white p-2 rounded-lg"
+						>
+							New Team
+						</button>
+					</div>
+					<ul className="list-disc pl-4">
+						{teams.map((team, index) => (
+							<li key={index} className="text-lg text-gray-700">
+								<Link
+									href={`/organization/${params.orgId}/credentials/${team.ID}`}
+								>
+									{team.name}
 								</Link>
 							</li>
 						))}
@@ -244,6 +265,36 @@ const Organization = ({ params }: { params: { orgId: number } }) => {
 							className="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
 						>
 							Invite Member
+						</button>
+					</div>
+				</Modal>
+			)}
+			{showTeamCreateModal && (
+				<Modal onClose={() => setShowTeamCreateModal(false)}>
+					<div className="flex flex-col">
+						<h1 className="text-2xl font-bold mb-4">Create Team</h1>
+						<div className="mb-4">
+							<label
+								htmlFor="team_name"
+								className="block text-sm font-semibold mb-1"
+							>
+								Team Name
+							</label>
+							<input
+								id="team_name"
+								type="text"
+								value={name}
+								onChange={e => setName(e.target.value)}
+								required
+								className="w-full px-4 py-2 border rounded-md focus:outline-none focus:border-blue-500 text-black"
+							/>
+						</div>
+
+						<button
+							onClick={handleSubmitTeam}
+							className="w-full py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600"
+						>
+							Create Team
 						</button>
 					</div>
 				</Modal>

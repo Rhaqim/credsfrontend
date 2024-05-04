@@ -3,7 +3,7 @@ import { BaseID } from ".";
 declare interface OrganizationTeam extends BaseID {
     name: string;
     manager_id?: number;
-    created_by_id: number;
+    created_by_id?: number;
     organization_id: number;
     privileges: Privileges;
 }
