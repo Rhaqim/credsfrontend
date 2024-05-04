@@ -13,6 +13,7 @@ const Organization = ({ params }: { params: { orgId: number } }) => {
 	const {
 		organization,
 		credentials,
+		teams,
 		members,
 		setCredentials,
 		getOrganization,
@@ -97,6 +98,30 @@ const Organization = ({ params }: { params: { orgId: number } }) => {
 							className="bg-blue-500 text-white p-2 rounded-lg"
 						>
 							New Credential
+						</button>
+					</div>
+					<ul className="list-disc pl-4">
+						{teams.map((team, index) => (
+							<li key={index} className="text-lg text-gray-700">
+								<Link
+									href={`/organization/${params.orgId}/credentials/${team.ID}`}
+								>
+									{team.name}
+								</Link>
+							</li>
+						))}
+					</ul>
+				</div>
+				
+				<div>
+					{/* Create new */}
+					<div className="flex justify-between items-center">
+						<h2 className="text-xl font-bold mb-4">Teams</h2>
+						<button
+							onClick={() => setShowCredCreateModal(true)}
+							className="bg-blue-500 text-white p-2 rounded-lg"
+						>
+							New Team
 						</button>
 					</div>
 					<ul className="list-disc pl-4">

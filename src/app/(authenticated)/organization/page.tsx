@@ -40,10 +40,13 @@ const Organizations = () => {
 							</div>
 							<div className="flex justify-between">
 								<p className="text-sm text-gray-500">
-									Credentials: {org.credentials_count || 0}
+									Teams: {org.teams_count || 0}
 								</p>
 								<p className="text-sm text-gray-500">
 									Members: {org.members_count || 0}
+								</p>
+								<p className="text-sm text-gray-500">
+									Credentials: {org.credentials_count || 0}
 								</p>
 							</div>
 						</Link>
