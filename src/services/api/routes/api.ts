@@ -1,3 +1,5 @@
+import { create } from "domain";
+
 // API Routes
 const org = '/api/organization';
 export const OrgRoutes = {
@@ -16,8 +18,9 @@ export const CredsRoutes = {
 
 const team = `${org}/team`;
 export const TeamRoutes = {
+	create: `${team}/create`,
 	all: `${team}`,
 	one: (memId: number) => `${team}/${memId}`,
-	add: '${team}/add',
-	invite: '${team}/invite',
+	add: `${team}/add`,
+	invite: `${team}/invite`,
 }

@@ -204,7 +204,7 @@ export const OrgProvider = ({ children }: OrgProviderType) => {
 
 	const createTeam = async (data: OrganizationTeam): Promise<OrganizationTeam | undefined> => {
 		try {
-			const response = await TeamEndPoints.add(data);
+			const response = await TeamEndPoints.create(data);
 			const { team } = response.data;
 			if (team) {
 				return team as unknown as OrganizationTeam;
