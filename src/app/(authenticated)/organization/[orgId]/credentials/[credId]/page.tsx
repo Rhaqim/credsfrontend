@@ -3,7 +3,8 @@
 import React, { useEffect, useState } from "react";
 
 import { useOrg } from "@/context/org.context";
-import { CredentialField, Field } from "@/types/credential.type";
+import { Field } from "@/types/credential.type";
+import { CredsEndPoints } from "@/services/api";
 
 import { envString } from "./util";
 
@@ -36,6 +37,13 @@ const Credential = ({
 		const newFields = [...fields];
 		newFields.splice(index, 1);
 		setFields(newFields);
+	};
+
+	const handleSubmit = async () => {
+		const data = fields.filter(field => field.key && field.value);
+		if (data.length) {
+			await CredsEndPoints.addFields(params.credId, data);
+		}
 	};
 
 	const handleUploadChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -73,14 +81,14 @@ const Credential = ({
 							<div key={index} className="mb-4 flex items-center">
 								<input
 									type="text"
-									className="border border-gray-300 rounded mr-2 px-4 py-2 flex-grow"
+									className="border border-gray-300 text-black rounded mr-2 px-4 py-2 flex-grow"
 									placeholder="Key"
 									value={field.key}
 									onChange={e => handleChange(index, e, "key")}
 								/>
 								<input
 									type="text"
-									className="border border-gray-300 rounded mr-2 px-4 py-2 flex-grow"
+									className="border border-gray-300 text-black rounded mr-2 px-4 py-2 flex-grow"
 									placeholder="Value"
 									value={field.value}
 									onChange={e => handleChange(index, e, "value")}
@@ -93,12 +101,22 @@ const Credential = ({
 								</button>
 							</div>
 						))}
-						<button
-							className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200"
-							onClick={handleAddField}
-						>
-							Add More
-						</button>
+						<div className="flex justify-between">
+							{fields[0]?.key && fields[0]?.value && (
+								<button
+									className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200"
+									onClick={handleSubmit}
+								>
+									Save
+								</button>
+							)}
+							<button
+								className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition duration-200"
+								onClick={handleAddField}
+							>
+								Add More
+							</button>
+						</div>
 					</div>
 					<div className="mb-4">
 						{cred?.fields && (

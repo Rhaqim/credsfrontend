@@ -14,6 +14,7 @@ export const CredsRoutes = {
 	one: (credId: number) => `${cred}/${credId}`,
 	create: `${cred}/create`,
 	upload: (credId: number) => `${cred}/${credId}/upload`,
+	fields: (credId: number) => `${cred}/fields/${credId}`,
 };
 
 const team = `${org}/team`;
